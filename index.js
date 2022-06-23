@@ -67,7 +67,7 @@ const questions = [
         type: 'list',
         name: 'license',
         message: 'Choose the license you will use for your project.(Required!)',
-        choices: ['CCO', 'GNU', 'MIT', 'SIL', 'no license']
+        choices: ['Boost', 'GNU', 'MIT', 'SIL', 'no license']
     },
     // Contributions
     {
@@ -138,13 +138,26 @@ const questions = [
                 return false;
             }
         }
+    },
+    {
+    type: 'input',
+    name: 'link',
+    message: 'Provide the link to your deployed project.(Required!)',
+    validate: linkInput => {
+        if (linkInput) {
+            return true;
+        } else {
+            console.log('Please enter the deployed link to your project');
+            return false;
+        }
     }
+}
 ];
 
 // TODO: Create a function to write README file
-const writeFile = fileContent => {
+const writeToFile = (fileName, data) => {
     return new Promise((resolve, reject) => {
-        fs.writeFile('./dist/README.md', fileContent, err => {
+        fs.writeFile('./dist/README.md', (fileName, data), err => {
             if (err) {
                 reject(err);
                 return;
@@ -157,7 +170,21 @@ const writeFile = fileContent => {
         });
     });
 };
+// const writeFile = fileContent => {
+//     return new Promise((resolve, reject) => {
+//         fs.writeFile('./dist/README.md', fileContent, err => {
+//             if (err) {
+//                 reject(err);
+//                 return;
+//             }
 
+//             resolve({
+//                 ok: true,
+//                 message: 'File created!'
+//             });
+//         });
+//     });
+// };
 
 // function writeToFile(fileName, data) { 
 //     fs.writeFile(fileName, data, error => {
@@ -168,22 +195,24 @@ const writeFile = fileContent => {
 // }
 
 // TODO: Create a function to initialize app
-function init() {
+const init = () => {
 
     return inquirer.prompt(questions)
-
+// .then(data => {
+//     return data;
+// })
 
 }
 
 // Function call to initialize app
 init()
-.then(data => {
-    console.log(data);
-    return generateMarkdown(data);
-})
-.then (data => {
-    return writeFile('README.md', data)
-});
+    .then(data => {
+        console.log(data);
+        return generateMarkdown(data);
+    })
+    .then(data => {
+        return writeToFile('README.md', data)
+    });
 // type: '',
 // name: '',
 // message: '',
