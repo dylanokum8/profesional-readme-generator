@@ -97,7 +97,7 @@ const questions = [
             }
         }
     },
-//  Section for instructions on how to be contacted with any questions
+    //  Section for instructions on how to be contacted with any questions
     {
         type: 'input',
         name: 'questions',
@@ -111,7 +111,7 @@ const questions = [
             }
         }
     },
-// Github Username
+    // Github Username
     {
         type: 'input',
         name: 'github',
@@ -125,7 +125,7 @@ const questions = [
             }
         }
     },
-// Contact email address
+    // Contact email address
     {
         type: 'input',
         name: 'email',
@@ -142,13 +142,48 @@ const questions = [
 ];
 
 // TODO: Create a function to write README file
-function writeToFile(fileName, data) { }
+const writeFile = fileContent => {
+    return new Promise((resolve, reject) => {
+        fs.writeFile('./dist/README.md', fileContent, err => {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            resolve({
+                ok: true,
+                message: 'File created!'
+            });
+        });
+    });
+};
+
+
+// function writeToFile(fileName, data) { 
+//     fs.writeFile(fileName, data, error => {
+//         if(error) {
+//             console.log('')
+//         }
+//     })
+// }
 
 // TODO: Create a function to initialize app
-function init() { }
+function init() {
+
+    return inquirer.prompt(questions)
+
+
+}
 
 // Function call to initialize app
-init();
+init()
+.then(data => {
+    console.log(data);
+    return generateMarkdown(data);
+})
+.then (data => {
+    return writeFile('README.md', data)
+});
 // type: '',
 // name: '',
 // message: '',
